@@ -4,8 +4,7 @@ pub fn run(input: String) {
     let mut area_total = 0;
     let mut ribbon = 0;
     for line in input.lines() {
-        let (l, w, h) = line.split('x').tuples().next().unwrap();
-        let (l, w, h) = (l.parse::<i32>().unwrap(), w.parse::<i32>().unwrap(), h.parse::<i32>().unwrap());
+        let (l, w, h) = line.split('x').map(|v| v.parse::<i32>().unwrap()).tuples().next().unwrap();
 
         let area_sides: Vec<i32> = vec![l * w, w * h, l * h];
         let area_package = area_sides.clone().into_iter()
