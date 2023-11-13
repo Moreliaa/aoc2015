@@ -1,9 +1,15 @@
 use md5;
+use std::time::Instant;
 
 pub fn run() {
-    let input = "iwrupvqb".to_string();
-    println!("Pt1: {}", pt1(&input));
-    println!("Pt2: {}", pt2(&input));
+    let input = "iwrupvqb";
+    let b1 = Instant::now();
+    println!("Day4 Pt1: {}", pt1(input));
+    let b2 = Instant::now();
+    println!("Time Pt1: {:?}", b2.duration_since(b1));
+    println!("Day4 Pt2: {}", pt2(input));
+    let b3 = Instant::now();
+    println!("Time Pt2: {:?}", b3.duration_since(b2));
 }
 
 fn pt1(input: &str) -> i32 {
@@ -19,8 +25,7 @@ fn pt1(input: &str) -> i32 {
 }
 
 fn md(input: &str, i: i32) -> String {
-    let input = input.to_string() + i.to_string().as_str();
-    format!("{:x}", md5::compute(input.as_bytes()))
+    format!("{:x}", md5::compute(format!("{input}{i}").as_bytes()))
 }
 
 fn pt2(input: &str) -> i32 {
