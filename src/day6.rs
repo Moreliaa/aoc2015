@@ -25,15 +25,7 @@ fn pt1(input: &String) -> i32 {
             _ => panic!("unexpected: {l}")
         }
     }
-    let mut sum = 0;
-    for x in 0..=999 {
-        for y in 0..=999 {
-            if *map.get(x,y).unwrap() == '#' {
-                sum += 1
-            }
-        }
-    }
-    sum
+    map.aggregate(|val| if *val == '#' { 1 } else { 0 })
 }
 
 fn turn_on(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
@@ -76,13 +68,7 @@ fn pt2(input: &String) -> i32 {
             _ => panic!("unexpected: {l}")
         }
     }
-    let mut sum = 0;
-    for x in 0..=999 {
-        for y in 0..=999 {
-            sum += *map.get(x,y).unwrap();
-        }
-    }
-    sum
+    map.aggregate(|val| *val)
 }
 
 fn change(map: &mut Map2D<i32>, coords: (i32, i32, i32, i32), val: i32) {

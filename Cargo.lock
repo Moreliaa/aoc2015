@@ -39,7 +39,7 @@ dependencies = [
 [[package]]
 name = "aoc_lib"
 version = "0.1.0"
-source = "git+https://github.com/Moreliaa/aoc_lib.git#1e1a306ca3774958abb5aec19fd3320c4e603274"
+source = "git+https://github.com/Moreliaa/aoc_lib.git#c678b1781cf11269d28d6e30ed097baa7f9f6229"
 dependencies = [
  "reqwest",
 ]
@@ -112,9 +112,9 @@ checksum = "a2bd12c1caf447e69cd4528f47f94d203fd2582878ecb9e9465484c4148a8223"
 
 [[package]]
 name = "cc"
-version = "1.0.84"
+version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f8e7c90afad890484a21653d08b6e209ae34770fb5ee298f9c699fcc1e5c856"
+checksum = "f1174fb0b6ec23863f8b971027804a42614e347eafb0a95bf0b12cdae21fc4d0"
 dependencies = [
  "libc",
 ]
