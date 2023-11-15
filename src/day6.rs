@@ -1,5 +1,5 @@
-use fancy_regex::Regex;
 use aoc_lib::map2d::Map2D;
+use fancy_regex::Regex;
 
 pub fn run(input: String) {
     println!("Day6 Pt1: {}", pt1(&input));
@@ -9,8 +9,13 @@ pub fn run(input: String) {
 fn read_line(input: &str) -> (&str, i32, i32, i32, i32) {
     let re = Regex::new(r"(turn on|toggle|turn off) (\d+),(\d+) through (\d+),(\d+)").unwrap();
     let cap = re.captures(input).unwrap().unwrap();
-    (cap.get(1).unwrap().as_str(), cap.get(2).unwrap().as_str().parse::<i32>().unwrap(), cap.get(3).unwrap().as_str().parse::<i32>().unwrap(),
-    cap.get(4).unwrap().as_str().parse::<i32>().unwrap(), cap.get(5).unwrap().as_str().parse::<i32>().unwrap())
+    (
+        cap.get(1).unwrap().as_str(),
+        cap.get(2).unwrap().as_str().parse::<i32>().unwrap(),
+        cap.get(3).unwrap().as_str().parse::<i32>().unwrap(),
+        cap.get(4).unwrap().as_str().parse::<i32>().unwrap(),
+        cap.get(5).unwrap().as_str().parse::<i32>().unwrap(),
+    )
 }
 
 fn pt1(input: &String) -> i32 {
@@ -22,7 +27,7 @@ fn pt1(input: &String) -> i32 {
             "turn on" => turn_on(&mut map, coords),
             "turn off" => turn_off(&mut map, coords),
             "toggle" => toggle(&mut map, coords),
-            _ => panic!("unexpected: {l}")
+            _ => panic!("unexpected: {l}"),
         }
     }
     map.aggregate(|val| if *val == '#' { 1 } else { 0 })
@@ -31,7 +36,7 @@ fn pt1(input: &String) -> i32 {
 fn turn_on(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
     for x in coords.0..=coords.2 {
         for y in coords.1..=coords.3 {
-            map.set(x as usize,y as usize, '#');
+            map.set(x as usize, y as usize, '#');
         }
     }
 }
@@ -39,7 +44,7 @@ fn turn_on(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
 fn turn_off(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
     for x in coords.0..=coords.2 {
         for y in coords.1..=coords.3 {
-            map.set(x as usize,y as usize, '.');
+            map.set(x as usize, y as usize, '.');
         }
     }
 }
@@ -47,11 +52,11 @@ fn turn_off(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
 fn toggle(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
     for x in coords.0..=coords.2 {
         for y in coords.1..=coords.3 {
-            let c = match map.get(x as usize,y as usize).unwrap() {
+            let c = match map.get(x as usize, y as usize).unwrap() {
                 '.' => '#',
-                _ => '.'
+                _ => '.',
             };
-            map.set(x as usize,y as usize, c);
+            map.set(x as usize, y as usize, c);
         }
     }
 }
@@ -65,7 +70,7 @@ fn pt2(input: &String) -> i32 {
             "turn on" => change(&mut map, coords, 1),
             "turn off" => change(&mut map, coords, -1),
             "toggle" => change(&mut map, coords, 2),
-            _ => panic!("unexpected: {l}")
+            _ => panic!("unexpected: {l}"),
         }
     }
     map.aggregate(|val| *val)
@@ -74,7 +79,11 @@ fn pt2(input: &String) -> i32 {
 fn change(map: &mut Map2D<i32>, coords: (i32, i32, i32, i32), val: i32) {
     for x in coords.0..=coords.2 {
         for y in coords.1..=coords.3 {
-            map.set(x as usize,y as usize, (*map.get(x as usize, y as usize).unwrap() + val).max(0));
+            map.set(
+                x as usize,
+                y as usize,
+                (*map.get(x as usize, y as usize).unwrap() + val).max(0),
+            );
         }
     }
 }

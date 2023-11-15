@@ -6,6 +6,7 @@ mod day3;
 mod day4;
 mod day5;
 mod day6;
+mod day7;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -20,8 +21,9 @@ fn main() {
         day3::run(input("3"));
         day4::run();
         day5::run(input("5"));
+        day6::run(input("6"));
     }
-    day6::run(input("6"));
+    day7::run(input("7"));
 }
 
 fn input(day: &str) -> String {

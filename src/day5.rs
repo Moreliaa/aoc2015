@@ -8,7 +8,6 @@ pub fn run(input: String) {
 fn pt1(input: &String) -> i32 {
     let mut i = 0;
     for l in input.lines() {
-        
         if is_nice(l) {
             i += 1;
         }
@@ -22,21 +21,41 @@ fn is_nice(input: &str) -> bool {
     let mut last_char: Option<char> = None;
     for c in input.chars() {
         match last_char {
-            Some(val) => if val == c { has_dupe = true; }
+            Some(val) => {
+                if val == c {
+                    has_dupe = true;
+                }
+            }
             None => (),
         }
 
         match last_char {
-            Some('a') => if c == 'b' { return false; },
-            Some('c') => if c == 'd' { return false; },
-            Some('p') => if c == 'q' { return false; },
-            Some('x') => if c == 'y' { return false; },
+            Some('a') => {
+                if c == 'b' {
+                    return false;
+                }
+            }
+            Some('c') => {
+                if c == 'd' {
+                    return false;
+                }
+            }
+            Some('p') => {
+                if c == 'q' {
+                    return false;
+                }
+            }
+            Some('x') => {
+                if c == 'y' {
+                    return false;
+                }
+            }
             _ => (),
         }
 
         match c {
             'a' | 'e' | 'i' | 'u' | 'o' => vowels += 1,
-            _ => ()
+            _ => (),
         }
 
         last_char = Some(c);
@@ -47,7 +66,6 @@ fn is_nice(input: &str) -> bool {
 fn pt2(input: &String) -> i32 {
     let mut i = 0;
     for l in input.lines() {
-        
         if is_nice_pt2(l) {
             i += 1;
         }

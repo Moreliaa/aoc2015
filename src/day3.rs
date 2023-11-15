@@ -6,7 +6,7 @@ pub fn run(input: String) {
 }
 
 fn pt1(input: &str) -> usize {
-    let mut set:HashSet<(i32, i32)> = HashSet::new();
+    let mut set: HashSet<(i32, i32)> = HashSet::new();
     let (mut x, mut y) = (0, 0);
     set.insert((x, y));
     for c in input.chars() {
@@ -15,7 +15,7 @@ fn pt1(input: &str) -> usize {
             '<' => x -= 1,
             '>' => x += 1,
             'v' => y += 1,
-            _ => panic!("unexpected!")
+            _ => panic!("unexpected!"),
         }
         set.insert((x, y));
     }
@@ -23,7 +23,7 @@ fn pt1(input: &str) -> usize {
 }
 
 fn pt2(input: &str) -> usize {
-    let mut set:HashSet<(i32, i32)> = HashSet::new();
+    let mut set: HashSet<(i32, i32)> = HashSet::new();
     struct Santa(i32, i32);
     let mut s = Santa(0, 0);
     let mut r = Santa(0, 0);
@@ -36,7 +36,7 @@ fn pt2(input: &str) -> usize {
             '<' => m.0 -= 1,
             '>' => m.0 += 1,
             'v' => m.1 += 1,
-            _ => panic!("unexpected!")
+            _ => panic!("unexpected!"),
         }
         set.insert((m.0, m.1));
     }
