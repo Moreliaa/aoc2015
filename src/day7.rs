@@ -26,7 +26,7 @@ fn build_circuit<'a>(
             let c = re.captures(l).unwrap().unwrap();
             let cmd = c.get(1).unwrap().as_str();
             let wire = c.get(2).unwrap().as_str();
-            if (result.contains_key(wire)) {
+            if result.contains_key(wire) {
                 continue;
             }
 
@@ -95,10 +95,6 @@ fn build_circuit<'a>(
         commands_remaining = vec![];
     }
     result
-}
-
-fn get_val(result: &HashMap<&str, u16>, input: &str) -> Option<u16> {
-    Some(0)
 }
 
 fn pt2(input: &String, pt1_result: u16) -> u16 {
