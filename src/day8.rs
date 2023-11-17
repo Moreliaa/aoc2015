@@ -24,10 +24,10 @@ fn num_chars_mem(input: &str) -> i32 {
     let mut count = -2;
     while i < input.len() {
         if &input[i..i + 1] == "\\" {
-            match &input[i + 1.. i + 2] {
+            match &input[i + 1..i + 2] {
                 "x" => {
                     i += 3;
-                },
+                }
                 _ => {
                     i += 1;
                 }
@@ -62,20 +62,20 @@ fn escape<'a>(input: &'a str) -> String {
         let c = &input[i..i + 1];
         if c == "\\" {
             output.push_str("\\\\");
-            match &input[i + 1.. i + 2] {
+            match &input[i + 1..i + 2] {
                 "x" => {
                     output.push_str(&input[i + 1..=i + 3]);
                     i += 3;
-                },
+                }
                 "\"" => {
                     i += 1;
                     output.push_str("\\\"");
-                },
+                }
                 "\\" => {
                     i += 1;
                     output.push_str("\\\\");
-                },
-                _ => panic!("unexpected!")
+                }
+                _ => panic!("unexpected!"),
             }
         } else {
             output.push_str(c);
