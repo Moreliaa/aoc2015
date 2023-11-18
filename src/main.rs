@@ -1,6 +1,8 @@
 use aoc_lib::input_reader;
 use std::env;
 mod day1;
+mod day10;
+mod day11;
 mod day2;
 mod day3;
 mod day4;
@@ -9,7 +11,6 @@ mod day6;
 mod day7;
 mod day8;
 mod day9;
-mod day10;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -28,8 +29,9 @@ fn main() {
         day7::run(input("7"));
         day8::run(input("8"));
         day9::run(input("9"));
+        day10::run();
     }
-    day10::run();
+    day11::run();
 }
 
 fn input(day: &str) -> String {
