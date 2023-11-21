@@ -82,7 +82,6 @@ fn pt2(input: &mut Vec<Deer>, time: i32) -> i32 {
 
         i += 1;
     }
-    println!("{:?}", input);
     input
         .iter()
         .reduce(|d1, d2| if d1.points > d2.points { d1 } else { d2 })
