@@ -30,6 +30,7 @@ fn parse_input(input: String) -> Vec<Deer> {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 struct Deer {
     name: String,
     speed: i32,
