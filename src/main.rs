@@ -5,6 +5,7 @@ mod day10;
 mod day11;
 mod day12;
 mod day13;
+mod day14;
 mod day2;
 mod day3;
 mod day4;
@@ -34,8 +35,9 @@ fn main() {
         day10::run();
         day11::run();
         day12::run(input("12"));
+        day13::run(input("13"));
     }
-    day13::run(input("13"));
+    day14::run(input("14"));
 }
 
 fn input(day: &str) -> String {
