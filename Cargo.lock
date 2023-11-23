@@ -39,7 +39,7 @@ dependencies = [
 [[package]]
 name = "aoc_lib"
 version = "0.1.0"
-source = "git+https://github.com/Moreliaa/aoc_lib.git#8e861c7a3e5b2c0f63bfec9152a4592511411703"
+source = "git+https://github.com/Moreliaa/aoc_lib.git#ee1ae0605804ed8d89c040b874a039de2025f34e"
 dependencies = [
  "reqwest",
 ]

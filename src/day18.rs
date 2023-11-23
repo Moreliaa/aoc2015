@@ -13,7 +13,7 @@ fn pt1(input: &String) -> i32 {
         let mut next_map = Map2D::new(map.width(), map.height(), '#');
         for x in 0..map.width() {
             for y in 0..map.height() {
-                let was_on = *map.get(x, y).unwrap() == '#';
+                let was_on = *map.get(x as i32, y as i32).unwrap() == '#';
                 let coords: [(i32, i32); 8] = [
                     (-1, -1),
                     (-1, 0),
@@ -29,7 +29,7 @@ fn pt1(input: &String) -> i32 {
                     let y1: i32 = y as i32 + b.1;
                     a + match map.is_in_bounds(x1, y1) {
                         true => {
-                            if *map.get(x1 as usize, y1 as usize).unwrap() == '#' {
+                            if *map.get(x1, y1).unwrap() == '#' {
                                 1
                             } else {
                                 0
@@ -61,8 +61,8 @@ fn pt2(input: &String) -> i32 {
     let mut map = Map2D::from_string(input.clone());
     map.set(0, 0, '#');
     map.set(0, map.height() - 1, '#');
-    map.set(map.width() - 1, 0, '#');
-    map.set(map.width() - 1, map.height() - 1, '#');
+    map.set(map.width()- 1, 0, '#');
+    map.set(map.width()- 1, map.height() - 1, '#');
     let max_steps = 100;
     let mut steps = 0;
     while steps < max_steps {
@@ -76,7 +76,7 @@ fn pt2(input: &String) -> i32 {
                 {
                     continue;
                 }
-                let was_on = *map.get(x, y).unwrap() == '#';
+                let was_on = *map.get(x as i32, y as i32).unwrap() == '#';
                 let coords: [(i32, i32); 8] = [
                     (-1, -1),
                     (-1, 0),
@@ -92,7 +92,7 @@ fn pt2(input: &String) -> i32 {
                     let y1: i32 = y as i32 + b.1;
                     a + match map.is_in_bounds(x1, y1) {
                         true => {
-                            if *map.get(x1 as usize, y1 as usize).unwrap() == '#' {
+                            if *map.get(x1, y1).unwrap() == '#' {
                                 1
                             } else {
                                 0
@@ -111,7 +111,7 @@ fn pt2(input: &String) -> i32 {
                         next_char = '#';
                     }
                 }
-                next_map.set(x, y, next_char);
+                next_map.set(x as i32, y as i32, next_char);
             }
         }
         map = next_map;

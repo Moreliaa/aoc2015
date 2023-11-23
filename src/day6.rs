@@ -36,7 +36,7 @@ fn pt1(input: &String) -> i32 {
 fn turn_on(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
     for x in coords.0..=coords.2 {
         for y in coords.1..=coords.3 {
-            map.set(x as usize, y as usize, '#');
+            map.set(x, y, '#');
         }
     }
 }
@@ -44,7 +44,7 @@ fn turn_on(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
 fn turn_off(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
     for x in coords.0..=coords.2 {
         for y in coords.1..=coords.3 {
-            map.set(x as usize, y as usize, '.');
+            map.set(x, y, '.');
         }
     }
 }
@@ -52,11 +52,11 @@ fn turn_off(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
 fn toggle(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
     for x in coords.0..=coords.2 {
         for y in coords.1..=coords.3 {
-            let c = match map.get(x as usize, y as usize).unwrap() {
+            let c = match map.get(x, y).unwrap() {
                 '.' => '#',
                 _ => '.',
             };
-            map.set(x as usize, y as usize, c);
+            map.set(x, y, c);
         }
     }
 }
@@ -80,9 +80,9 @@ fn change(map: &mut Map2D<i32>, coords: (i32, i32, i32, i32), val: i32) {
     for x in coords.0..=coords.2 {
         for y in coords.1..=coords.3 {
             map.set(
-                x as usize,
-                y as usize,
-                (*map.get(x as usize, y as usize).unwrap() + val).max(0),
+                x,
+                y,
+                (*map.get(x, y).unwrap() + val).max(0),
             );
         }
     }
