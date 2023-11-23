@@ -4,8 +4,9 @@ use std::collections::{HashMap, HashSet};
 pub fn run(input: String) {
     let (mol, replacements) = parse_input(&input);
     println!("Day19 Pt1: {}", pt1(&mol, &replacements));
-    println!("Day19 Pt2: {}", pt2(&input));
+    println!("Day19 Pt2: {}", pt2(&mol));
 }
+
 
 fn parse_input<'a>(input: &'a String) -> (String, HashMap<&'a str, Vec<&'a str>>) {
     let mut replacements: HashMap<&str, Vec<&str>> = HashMap::new(); 
@@ -34,25 +35,61 @@ fn parse_input<'a>(input: &'a String) -> (String, HashMap<&'a str, Vec<&'a str>>
 
 fn pt1(mol: &String, replacements: &HashMap<&str, Vec<&str>>) -> usize {
     let mut set:HashSet<String> = HashSet::new();
-    for (r, options) in replacements {
-        let size = r.len();
-        let mut i = 0;
-        while i + size <= mol.len() {
-            if *r == &mol[i..i + size] {
-                for o in options {
-                    let new_mol = String::from(&mol[0..i]) + o + &mol[i + size..mol.len()];
-                    println!("{new_mol} {o} {r}");
-                    set.insert(new_mol);
-                }
-            }
-            i+=1;
-        } 
-    }
+    set.insert(mol.clone());
+    (set, _) = step(set, &String::from("A"), &replacements);
     set.len()
 }
 
-fn pt2(input: &String) -> i32 {
-    0
+fn step(set:HashSet<String>, target:&String, replacements: &HashMap<&str, Vec<&str>>) -> (HashSet<String>, bool) {
+    let mut next_map:HashSet<String> = HashSet::new();
+    for key in set {
+        for (r, options) in replacements {
+            let size = r.len();
+            let mut i = 0;
+            while i + size <= key.len() {
+                if *r == &key[i..i + size] {
+                    for o in options {
+                        let new_mol = String::from(&key[0..i]) + o + &key[i + size..key.len()];
+                        if new_mol == *target {
+                            return (next_map, true);
+                        }
+                        next_map.insert(new_mol);
+                    }
+                }
+                i+=1;
+            } 
+        }
+    }
+    (next_map, false)
+}
+
+fn pt2(mol: &String) -> i32 {
+    let mut i = 0;
+    
+    let mut elem_count = 0;
+    let mut rn_ar_count = 0;
+    let mut y_count = 0;
+    let chars: Vec<char> = mol.chars().collect();
+    while i < chars.len() {
+        let c = chars.get(i).unwrap();
+        if char::is_uppercase(*c) {
+            elem_count += 1;
+        }
+        if *c == 'Y' {
+            y_count += 1;
+        }
+        match chars.get(i + 1) {
+            Some(val) => {
+                if (*c == 'A' && *val == 'r') || (*c == 'R' && *val == 'n') {
+                    rn_ar_count += 1;
+                }
+            }
+            None => ()
+        };
+
+        i += 1;
+    }
+    return elem_count - rn_ar_count - 2* y_count - 1;
 }
 
 #[cfg(test)]
