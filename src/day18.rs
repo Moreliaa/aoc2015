@@ -61,8 +61,8 @@ fn pt2(input: &String) -> i32 {
     let mut map = Map2D::from_string(input.clone());
     map.set(0, 0, '#');
     map.set(0, map.height() - 1, '#');
-    map.set(map.width()- 1, 0, '#');
-    map.set(map.width()- 1, map.height() - 1, '#');
+    map.set(map.width() - 1, 0, '#');
+    map.set(map.width() - 1, map.height() - 1, '#');
     let max_steps = 100;
     let mut steps = 0;
     while steps < max_steps {

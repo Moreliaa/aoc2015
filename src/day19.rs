@@ -7,9 +7,8 @@ pub fn run(input: String) {
     println!("Day19 Pt2: {}", pt2(&mol));
 }
 
-
 fn parse_input<'a>(input: &'a String) -> (String, HashMap<&'a str, Vec<&'a str>>) {
-    let mut replacements: HashMap<&str, Vec<&str>> = HashMap::new(); 
+    let mut replacements: HashMap<&str, Vec<&str>> = HashMap::new();
     let re = Regex::new(r"(.+) => (.+)").unwrap();
     let mut is_finished = false;
     for line in input.lines() {
@@ -34,14 +33,18 @@ fn parse_input<'a>(input: &'a String) -> (String, HashMap<&'a str, Vec<&'a str>>
 }
 
 fn pt1(mol: &String, replacements: &HashMap<&str, Vec<&str>>) -> usize {
-    let mut set:HashSet<String> = HashSet::new();
+    let mut set: HashSet<String> = HashSet::new();
     set.insert(mol.clone());
     (set, _) = step(set, &String::from("A"), &replacements);
     set.len()
 }
 
-fn step(set:HashSet<String>, target:&String, replacements: &HashMap<&str, Vec<&str>>) -> (HashSet<String>, bool) {
-    let mut next_map:HashSet<String> = HashSet::new();
+fn step(
+    set: HashSet<String>,
+    target: &String,
+    replacements: &HashMap<&str, Vec<&str>>,
+) -> (HashSet<String>, bool) {
+    let mut next_map: HashSet<String> = HashSet::new();
     for key in set {
         for (r, options) in replacements {
             let size = r.len();
@@ -56,8 +59,8 @@ fn step(set:HashSet<String>, target:&String, replacements: &HashMap<&str, Vec<&s
                         next_map.insert(new_mol);
                     }
                 }
-                i+=1;
-            } 
+                i += 1;
+            }
         }
     }
     (next_map, false)
@@ -65,7 +68,7 @@ fn step(set:HashSet<String>, target:&String, replacements: &HashMap<&str, Vec<&s
 
 fn pt2(mol: &String) -> i32 {
     let mut i = 0;
-    
+
     let mut elem_count = 0;
     let mut rn_ar_count = 0;
     let mut y_count = 0;
@@ -84,12 +87,12 @@ fn pt2(mol: &String) -> i32 {
                     rn_ar_count += 1;
                 }
             }
-            None => ()
+            None => (),
         };
 
         i += 1;
     }
-    return elem_count - rn_ar_count - 2* y_count - 1;
+    return elem_count - rn_ar_count - 2 * y_count - 1;
 }
 
 #[cfg(test)]
@@ -97,13 +100,14 @@ mod tests {
     use super::*;
     #[test]
     fn test() {
-        let input = String::from("H => HO
+        let input = String::from(
+            "H => HO
 H => OH
 O => HH
 
-HOH");
+HOH",
+        );
         let (mol, replacements) = parse_input(&input);
         assert_eq!(pt1(&mol, &replacements), 4);
-
     }
 }

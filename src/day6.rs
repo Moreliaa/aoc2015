@@ -79,11 +79,7 @@ fn pt2(input: &String) -> i32 {
 fn change(map: &mut Map2D<i32>, coords: (i32, i32, i32, i32), val: i32) {
     for x in coords.0..=coords.2 {
         for y in coords.1..=coords.3 {
-            map.set(
-                x,
-                y,
-                (*map.get(x, y).unwrap() + val).max(0),
-            );
+            map.set(x, y, (*map.get(x, y).unwrap() + val).max(0));
         }
     }
 }
