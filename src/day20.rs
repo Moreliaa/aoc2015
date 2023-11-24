@@ -5,7 +5,7 @@ pub fn run() {
 }
 
 fn pt1(target: u32) -> usize {
-    let size = (target / 10) as usize;
+    let size = (target / 20) as usize;
     let mut storage:Vec<u32> = vec![0; size];
     for elf in 1..size {
         let mut house = elf;
@@ -25,7 +25,7 @@ fn pt1(target: u32) -> usize {
 }
 
 fn pt2(target: u32) -> usize {
-    let size = (target / 10) as usize;
+    let size = (target / 20) as usize;
     let mut homes:Vec<u32> = vec![0; size];
     for elf in 1..size {
         let mut h = elf;
