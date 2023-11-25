@@ -54,31 +54,8 @@ fn pt1(packages: &Vec<i32>) -> u128 {
 
     let mut solutions:Vec<(Vec<usize>, Vec<usize>)> = vec![];
     for i in 0..possible_6.len() {
-        for j in i + 1..possible_6.len() {
             let p1 = &possible_6[i];
-            let p2 = &possible_6[j];
-            let result = p1.iter().fold(true, |acc, v| acc && !p2.contains(v));
-            if result {
-                let sum_3rd = packages.iter().enumerate().fold(0, |acc, v| if !p1.contains(&v.0) && !p2.contains(&v.0) {acc + *v.1} else {acc});
-                if sum_3rd != weight_per_compartment {
-                    panic!();
-                }
-                solutions.push((p1.clone(), p2.clone()));
-            }
-        }
-
-        for j in 0..possible_7.len() {
-            let p1 = &possible_6[i];
-            let p2 = &possible_7[j];
-            let result = p1.iter().fold(true, |acc, v| acc && !p2.contains(v));
-            if result {
-                let sum_3rd = packages.iter().enumerate().fold(0, |acc, v| if !p1.contains(&v.0) && !p2.contains(&v.0) {acc + *v.1} else {acc});
-                if sum_3rd != weight_per_compartment {
-                    panic!();
-                }
-                solutions.push((p1.clone(), p2.clone()));
-            }
-        }
+            solutions.push((p1.clone(), p1.clone()));
     }
 
     let mut min_qe: Option<u128> = None;
