@@ -208,10 +208,3 @@ fn pt2(player: &Character, boss: &Character, weapons: &Vec<Item>, armor:&Vec<Ite
     }
     max_cost.unwrap()
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn test() {}
-}

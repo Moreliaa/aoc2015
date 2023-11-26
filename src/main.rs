@@ -17,6 +17,7 @@ mod day21;
 mod day22;
 mod day23;
 mod day24;
+mod day25;
 mod day3;
 mod day4;
 mod day5;
@@ -56,8 +57,9 @@ fn main() {
         day21::run();
         day22::run();
         day23::run(input("23"));
+        day24::run(input("24"));
     }
-    day24::run(input("24"));
+    day25::run();
 }
 
 fn input(day: &str) -> String {

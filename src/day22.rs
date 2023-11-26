@@ -1,5 +1,6 @@
 use itertools::Itertools;
 use std::collections::HashMap;
+use std::cmp::Ordering;
 
 pub fn run() {
     let player = Character {
@@ -23,6 +24,9 @@ pub fn run() {
 }
 
 #[derive(Clone)]
+#[derive(PartialEq)]
+#[derive(Eq)]
+#[derive(Debug)]
 struct Character {
     hp: i32,
     atk_base: i32,
@@ -34,7 +38,6 @@ struct Character {
 fn ability_map() -> HashMap<Abilities, Ability> {
     let mut spells:HashMap<Abilities, Ability> = HashMap::new();
     spells.insert(Abilities::Attack, Ability {
-        name: "Attack".to_string(),
         mana_cost: 0,
         damage: 0,
         self_heal: 0,
@@ -43,7 +46,6 @@ fn ability_map() -> HashMap<Abilities, Ability> {
         effect_type: EffectType::NoEffect
     });
     spells.insert(Abilities::MagicMissile, Ability {
-        name: "Magic Missile".to_string(),
         mana_cost: 53,
         damage: 4,
         self_heal: 0,
@@ -52,7 +54,6 @@ fn ability_map() -> HashMap<Abilities, Ability> {
         effect_type: EffectType::NoEffect
     });
     spells.insert(Abilities::Drain, Ability {
-        name: "Drain".to_string(),
         mana_cost: 73,
         damage: 2,
         self_heal: 2,
@@ -61,7 +62,6 @@ fn ability_map() -> HashMap<Abilities, Ability> {
         effect_type: EffectType::NoEffect
     });
     spells.insert(Abilities::Shield, Ability {
-        name: "Shield".to_string(),
         mana_cost: 113,
         damage: 0,
         self_heal: 0,
@@ -70,7 +70,6 @@ fn ability_map() -> HashMap<Abilities, Ability> {
         effect_type: EffectType::Shield
     });
     spells.insert(Abilities::Poison, Ability {
-        name: "Poison".to_string(),
         mana_cost: 173,
         damage: 3,
         self_heal: 0,
@@ -79,7 +78,6 @@ fn ability_map() -> HashMap<Abilities, Ability> {
         effect_type: EffectType::Poison
     });
     spells.insert(Abilities::MagicRecharge, Ability {
-        name: "Recharge".to_string(),
         mana_cost: 229,
         damage: 0,
         self_heal: 0,
@@ -162,6 +160,9 @@ impl Character {
 
 #[derive(Clone)]
 #[derive(Copy)]
+#[derive(PartialEq)]
+#[derive(Eq)]
+#[derive(Debug)]
 struct Effect {
     damage: i32,
     duration: i32,
@@ -174,6 +175,7 @@ struct Effect {
 #[derive(PartialEq)]
 #[derive(Eq)]
 #[derive(Hash)]
+#[derive(Debug)]
 enum EffectType { NoEffect, Shield, Poison, MagicRecharge }
 #[derive(PartialEq)]
 #[derive(Eq)]
@@ -185,7 +187,6 @@ enum Abilities { Attack, MagicMissile, Drain, Shield, Poison, MagicRecharge }
 #[derive(Hash)]
 enum AbilityType { Attack, Buff, Debuff }
 struct Ability {
-    name: String,
     mana_cost: i32,
     damage: i32,
     self_heal: i32,
@@ -195,7 +196,10 @@ struct Ability {
 }
 
 #[derive(Clone)]
+#[derive(PartialEq)]
+#[derive(Eq)]
 struct State {
+    steps:i32,
     player: Character,
     boss: Character,
     players_turn: bool,
@@ -203,39 +207,84 @@ struct State {
 }
 
 fn pt1(player: &Character, boss: &Character) -> i32 {
-    let mut states: Vec<State> = vec![];
-    states.push(State {
+    let mut states: HashMap<(i32, i32, i32, i32), Vec<State>> = HashMap::new(); // steps, mana spent, boss hp, player hp
+    states.insert((0, 0, boss.hp, player.hp), vec![State {
+        steps:0,
         player: player.clone(),
         players_turn: true,
         boss:boss.clone(),
         log: vec![]
-    });
+    }]);
+
     let mut min_mana_spent:Option<i32> = None;
     let mut result_log: Option<Vec<String>> = None;
-    while states.len() > 0 {
-        let mut next_states: Vec<State> = vec![];
-        for s in states.into_iter() {
-            let mut result = step(s, min_mana_spent);
-            if result.0 {
-                min_mana_spent = match min_mana_spent {
-                    Some(val) => {
-                        if result.1[0].player.mana_spent < val {
-                            result_log = Some(result.1[0].log.clone());
-                            Some(result.1[0].player.mana_spent)
-                        } else {
-                            Some(val)
+    let mut seen_states: Vec<State> = vec![];
+    'outer: while states.len() > 0 {
+        let lowest_key = *states.keys().reduce(|acc, v| {
+            match acc.0.cmp(&v.0) {
+                Ordering::Less => v,
+                Ordering::Greater => acc,
+                Ordering::Equal => {
+                match acc.2.cmp(&v.2) {
+                    Ordering::Less => acc,
+                    Ordering::Greater => v,
+                    Ordering::Equal => {
+                        match acc.1.cmp(&v.1) {
+                            Ordering::Less => acc,
+                            Ordering::Greater => v,
+                            Ordering::Equal => {
+                                match acc.3.cmp(&v.3) {
+                                    Ordering::Less => v,
+                                    Ordering::Greater => acc,
+                                    Ordering::Equal => acc
+                                }
+                            }
                         }
-                    },
-                    None => {
-                        result_log = Some(result.1[0].log.clone());
-                        Some(result.1[0].player.mana_spent)
                     }
-                };
-            } else {
-                next_states.append(&mut result.1);
+                }
+            }
+                
+            }
+        }).unwrap();
+        //println!("{:?}", states.len());
+        let entry = states.get_mut(&lowest_key).unwrap();
+        //entry.sort_by(|a,b| b.player.mana_spent.cmp(&a.player.mana_spent));
+        let s = entry.pop().unwrap();
+        //println!("{:?}", lowest_key);
+        
+        if entry.len() == 0 {
+            states.remove(&lowest_key);
+        }
+        for seen in seen_states.iter() {
+            if *seen == s {
+                continue 'outer;
             }
         }
-        states = next_states;
+        seen_states.push(s.clone());
+        let result = step(s, min_mana_spent);
+        if result.0 {
+            min_mana_spent = match min_mana_spent {
+                Some(val) => {
+                    if result.1[0].player.mana_spent < val {
+                        result_log = Some(result.1[0].log.clone());
+                        Some(result.1[0].player.mana_spent)
+                    } else {
+                        Some(val)
+                    }
+                },
+                None => {
+                    result_log = Some(result.1[0].log.clone());
+                    Some(result.1[0].player.mana_spent)
+                }
+            };
+            println!("Success! {}",  min_mana_spent.unwrap());
+        } else {
+            result.1.into_iter().for_each(|r| {
+                states.entry((r.steps, r.player.mana_spent,r.boss.hp, r.player.hp))
+                    .and_modify(|e| e.push(r.clone()))
+                    .or_insert(vec![r]);
+            });
+        }
     }
 
     for l in result_log.unwrap() {
@@ -268,9 +317,10 @@ fn step(mut s: State, min_mana_spent: Option<i32>) -> (bool, Vec<State>) {
     }
 
     let names = ["MM", "D", "P", "S", "MR"];
-
+    //println!("{} {}", s.players_turn, s.player.hp);
     for (idx, spell) in [Abilities::MagicMissile, Abilities::Drain,Abilities::Poison,Abilities::Shield,Abilities::MagicRecharge].into_iter().enumerate() {
         let mut next_state = s.clone();
+        next_state.steps += 1;
         if next_state.players_turn {
             if next_state.player.cast(spell, &mut next_state.boss) {
             
@@ -281,13 +331,16 @@ fn step(mut s: State, min_mana_spent: Option<i32>) -> (bool, Vec<State>) {
         } else {
             next_state.boss.cast(Abilities::Attack, &mut next_state.player);
 
+            if next_state.player.hp <= 0 {
+                continue;
+            }
+
             next_state.log.push(format!("Boss attacks. Player: {} HP {} MP, Boss: {} HP", next_state.player.hp, next_state.player.mana, next_state.boss.hp));
             next_state.players_turn = !next_state.players_turn;
             next_states.push(next_state);
         }
         
     }
-
     (false, next_states)
 }
 
@@ -299,7 +352,7 @@ fn dmg(atk: i32, def: i32) -> i32 {
 }
 
 
-
+#[allow(unused_variables)]
 fn pt2(player: &Character, boss: &Character) -> i32 {
     0
 }
