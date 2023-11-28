@@ -4,13 +4,13 @@ pub fn run() {
     let player = Character {
         hp: 100,
         atk_base: 0,
-        def_base: 0
+        def_base: 0,
     };
 
     let boss = Character {
         hp: 100,
         atk_base: 8,
-        def_base: 2
+        def_base: 2,
     };
 
     let weapons = vec![
@@ -136,14 +136,20 @@ pub fn run() {
         },
     ];
 
-    println!("Day21 Pt1: {}", pt1(&player, &boss, &weapons, &armor, &rings));
-    println!("Day21 Pt2: {}", pt2(&player, &boss, &weapons, &armor, &rings));
+    println!(
+        "Day21 Pt1: {}",
+        pt1(&player, &boss, &weapons, &armor, &rings)
+    );
+    println!(
+        "Day21 Pt2: {}",
+        pt2(&player, &boss, &weapons, &armor, &rings)
+    );
 }
 
 struct Character {
     hp: i32,
     atk_base: i32,
-    def_base: i32
+    def_base: i32,
 }
 
 struct Item {
@@ -153,7 +159,13 @@ struct Item {
     def: i32,
 }
 
-fn pt1(player: &Character, boss: &Character, weapons: &Vec<Item>, armor:&Vec<Item>, rings:&Vec<Item>) -> i32 {
+fn pt1(
+    player: &Character,
+    boss: &Character,
+    weapons: &Vec<Item>,
+    armor: &Vec<Item>,
+    rings: &Vec<Item>,
+) -> i32 {
     let mut min_cost: Option<i32> = None;
     for w in weapons {
         for a in armor {
@@ -168,7 +180,10 @@ fn pt1(player: &Character, boss: &Character, weapons: &Vec<Item>, armor:&Vec<Ite
                 let ttk_boss = ttk(&boss, 0, &player, def_bonus);
                 if ttk_player <= ttk_boss {
                     min_cost = Some(cost);
-                    println!("{} {} {} {} {} {}", ttk_player, ttk_boss, w.name, a.name, r[0].name, r[1].name);
+                    println!(
+                        "{} {} {} {} {} {}",
+                        ttk_player, ttk_boss, w.name, a.name, r[0].name, r[1].name
+                    );
                 }
             }
         }
@@ -179,14 +194,18 @@ fn pt1(player: &Character, boss: &Character, weapons: &Vec<Item>, armor:&Vec<Ite
 fn ttk(attacker: &Character, atk_bonus: i32, defender: &Character, def_bonus: i32) -> i32 {
     let dmg = match attacker.atk_base + atk_bonus - (defender.def_base + def_bonus) {
         val if val <= 0 => 1,
-        val => val
+        val => val,
     };
     (defender.hp as f32 / dmg as f32).ceil() as i32
 }
 
-
-
-fn pt2(player: &Character, boss: &Character, weapons: &Vec<Item>, armor:&Vec<Item>, rings:&Vec<Item>) -> i32 {
+fn pt2(
+    player: &Character,
+    boss: &Character,
+    weapons: &Vec<Item>,
+    armor: &Vec<Item>,
+    rings: &Vec<Item>,
+) -> i32 {
     let mut max_cost: Option<i32> = None;
     for w in weapons {
         for a in armor {
@@ -201,7 +220,10 @@ fn pt2(player: &Character, boss: &Character, weapons: &Vec<Item>, armor:&Vec<Ite
                 let ttk_boss = ttk(&boss, 0, &player, def_bonus);
                 if ttk_player > ttk_boss {
                     max_cost = Some(cost);
-                    println!("{} {} {} {} {} {}", ttk_player, ttk_boss, w.name, a.name, r[0].name, r[1].name);
+                    println!(
+                        "{} {} {} {} {} {}",
+                        ttk_player, ttk_boss, w.name, a.name, r[0].name, r[1].name
+                    );
                 }
             }
         }
