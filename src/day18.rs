@@ -14,30 +14,13 @@ fn pt1(input: &String) -> i32 {
         for x in 0..map.width() {
             for y in 0..map.height() {
                 let was_on = *map.get(x as i32, y as i32).unwrap() == '#';
-                let coords: [(i32, i32); 8] = [
-                    (-1, -1),
-                    (-1, 0),
-                    (-1, 1),
-                    (0, -1),
-                    (0, 1),
-                    (1, -1),
-                    (1, 0),
-                    (1, 1),
-                ];
-                let on_count = coords.into_iter().fold(0, |a, b| {
-                    let x1: i32 = x as i32 + b.0;
-                    let y1: i32 = y as i32 + b.1;
-                    a + match map.is_in_bounds(x1, y1) {
-                        true => {
-                            if *map.get(x1, y1).unwrap() == '#' {
-                                1
-                            } else {
-                                0
-                            }
-                        }
-                        false => 0,
+                let on_count = map.aggregate_range(x - 1, x + 1, y - 1, y + 1, |tile, _, _| {
+                    if *tile == '#' {
+                        1
+                    } else {
+                        0
                     }
-                });
+                }) - (if was_on { 1 } else { 0 });
                 let mut next_char = '.';
                 if was_on {
                     if on_count == 2 || on_count == 3 {
@@ -54,7 +37,7 @@ fn pt1(input: &String) -> i32 {
         map = next_map;
         steps += 1;
     }
-    map.aggregate(|t| if *t == '#' { 1 } else { 0 })
+    map.aggregate(|t, _, _| if *t == '#' { 1 } else { 0 })
 }
 
 fn pt2(input: &String) -> i32 {
@@ -117,5 +100,5 @@ fn pt2(input: &String) -> i32 {
         map = next_map;
         steps += 1;
     }
-    map.aggregate(|t| if *t == '#' { 1 } else { 0 })
+    map.aggregate(|t, _, _| if *t == '#' { 1 } else { 0 })
 }

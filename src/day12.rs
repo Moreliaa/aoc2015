@@ -33,8 +33,9 @@ fn pt2(input: &String) -> i32 {
         sum: 0,
         is_red: false,
     });
-    let mut current_node = tree.get_root();
-    let mut i = 0;
+    let mut current_node = tree.get_mut_val(0);
+    let mut current_id = 0;
+    let mut i: usize = 0;
     let mut is_red = false;
     let mut indent = 0;
     let mut indent_red = -1;
@@ -42,7 +43,7 @@ fn pt2(input: &String) -> i32 {
     while i < input.len() {
         let sub = &input[i..i + 1];
         if i < input.len() - 6 && &input[i..i + 6] == ":\"red\"" {
-            current_node.borrow_mut().val.is_red = true;
+            current_node.is_red = true;
             indent_red = indent;
         }
         match sub {
@@ -52,57 +53,59 @@ fn pt2(input: &String) -> i32 {
             "{" => {
                 indent += 1;
                 if !is_red && num.len() > 0 {
-                    current_node.borrow_mut().val.sum += num.parse::<i32>().unwrap();
+                    current_node.sum += num.parse::<i32>().unwrap();
                 }
                 num = String::new();
-                let parent_is_red = current_node.borrow().val.is_red;
-                current_node = tree.add_child(
-                    &current_node,
+                let parent_is_red = current_node.is_red;
+                current_id = tree.add_child(
+                    current_id,
                     Node {
                         sum: 0,
                         is_red: parent_is_red,
                     },
                 );
+                current_node = tree.get_mut_val(current_id);
             }
             "}" => {
                 indent -= 1;
                 if !is_red && num.len() > 0 {
-                    current_node.borrow_mut().val.sum += num.parse::<i32>().unwrap();
+                    current_node.sum += num.parse::<i32>().unwrap();
                 }
                 if indent < indent_red {
                     is_red = false;
                     indent_red = -1;
                 }
                 num = String::new();
-                let next_node = current_node.borrow().get_parent().unwrap();
-                current_node = next_node;
+                let next_id = tree.get_parent_id(current_id).unwrap();
+                current_id = next_id;
+                current_node = tree.get_mut_val(current_id);
             }
             _ => {
                 if !is_red && num.len() > 0 {
-                    current_node.borrow_mut().val.sum += num.parse::<i32>().unwrap();
+                    current_node.sum += num.parse::<i32>().unwrap();
                 }
                 num = String::new();
             }
         }
         i += 1;
     }
-    tree.aggregate_root(|node| {
-        if node.borrow().val.is_red {
+    tree.aggregate_root(|id, node| {
+        if node.is_red {
             return 0;
         }
-        let mut parent_node = node.borrow().get_parent();
+        let mut parent_node = tree.get_parent_id(id);
         loop {
             match parent_node {
                 Some(val) => {
-                    if val.borrow().val.is_red {
+                    if tree.get_val(*val).is_red {
                         return 0;
                     }
-                    parent_node = val.borrow().get_parent();
+                    parent_node = tree.get_parent_id(*val);
                 }
                 None => break,
             };
         }
-        node.borrow().val.sum
+        node.sum
     })
 }
 

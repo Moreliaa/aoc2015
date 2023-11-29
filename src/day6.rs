@@ -30,7 +30,7 @@ fn pt1(input: &String) -> i32 {
             _ => panic!("unexpected: {l}"),
         }
     }
-    map.aggregate(|val| if *val == '#' { 1 } else { 0 })
+    map.aggregate(|val, _, _| if *val == '#' { 1 } else { 0 })
 }
 
 fn turn_on(map: &mut Map2D<char>, coords: (i32, i32, i32, i32)) {
@@ -73,7 +73,7 @@ fn pt2(input: &String) -> i32 {
             _ => panic!("unexpected: {l}"),
         }
     }
-    map.aggregate(|val| *val)
+    map.aggregate(|val, _, _| *val)
 }
 
 fn change(map: &mut Map2D<i32>, coords: (i32, i32, i32, i32), val: i32) {
